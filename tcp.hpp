@@ -4,7 +4,7 @@
 #include "net.hpp"
 
 namespace tcp {
-  static debugging::Debug* debug = new debugging::Debug("tcp", debugging::colors::green);
+  static debugging::Debug* debug = new debugging::Debug("tcp", debugging::colors::GREEN);
 
   void enableDebug() {
     debug->enable();
@@ -141,7 +141,7 @@ namespace tcp {
   };
 
   class Server {
-    private:
+    protected:
       addrinfo* ai;
       uint id;
 
@@ -152,10 +152,13 @@ namespace tcp {
       static void  operator delete[] (void*)  = delete;
 
       ~Server() {
+        log("destroying addrinfo");
         std::free(ai);
       }
 
       Server() {
+        log("creating server");
+
         ai = new addrinfo();
 
         net::set_type(ai, net::type::STREAM);
