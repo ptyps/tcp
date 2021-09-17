@@ -54,11 +54,9 @@ namespace tcp {
     public:
       static void *operator new      (size_t) = delete;
       static void *operator new[]    (size_t) = delete;
-      static void  operator delete   (void*)  = delete;
-      static void  operator delete[] (void*)  = delete;
 
-      ~Socket() {
-        log("destroying socket");
+      virtual ~Socket() {
+        log("destroying socket %i", id);
 
         std::free(ai);
       }
@@ -122,6 +120,8 @@ namespace tcp {
           auto i = net::connect(*fd, ai);
 
           if (i == net::status::FAIL) {
+            log("unable to connect, trying next");
+
             net::close(*fd);
             return !1;
           }
@@ -148,11 +148,10 @@ namespace tcp {
     public:
       static void *operator new      (size_t) = delete;
       static void *operator new[]    (size_t) = delete;
-      static void  operator delete   (void*)  = delete;
-      static void  operator delete[] (void*)  = delete;
 
       ~Server() {
         log("destroying addrinfo");
+
         std::free(ai);
       }
 
@@ -180,6 +179,8 @@ namespace tcp {
           auto i = net::bind(*fd, ai);
 
           if (i == net::status::FAIL) {
+            log("unable to bind, trying next");
+
             net::close(*fd);
             return !1;
           }
