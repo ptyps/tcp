@@ -55,7 +55,7 @@ namespace tcp {
       static void *operator new      (size_t) = delete;
       static void *operator new[]    (size_t) = delete;
 
-      virtual ~Socket() {
+      ~Socket() {
         log("destroying socket %i", id);
 
         std::free(ai);
