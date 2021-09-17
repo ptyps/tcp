@@ -52,13 +52,12 @@ namespace tcp {
       }
 
     public:
-      static void *operator new      (size_t) = delete;
-      static void *operator new[]    (size_t) = delete;
+      void operator delete(void* ptr) {
+        log("delete operator called");
 
-      ~Socket() {
-        log("destroying socket %i", id);
+        auto us = static_cast<Socket*>(ptr);
 
-        std::free(ai);
+        std::free(us->ai);
       }
 
       Socket() {
@@ -205,7 +204,7 @@ namespace tcp {
 
         auto pair = net::accept(id, ai);
 
-        return Socket(pair);
+        return new Socket(pair);
       }
   };
 }
